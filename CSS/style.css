@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+* {
+  font-family: 'Helvetica', arial;
+}
+
+body {
+  padding: 15px;
+  background-color: gainsboro;
+}
+
+.hide {
+  display: none;
+}
+
+a, input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20 px;
+  border-radius: 5px;
+  text-decoration: none;
+  opacity: 0.7; /*para deixar o botão mais apagado*/
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+a:hover,
+input[type="submit"] {
+  opacity: 1;
+}
