@@ -6,6 +6,11 @@ const postsContainer = document.querySelector("#posts-container");
 const postPage = document.querySelector("#post");
 const postContainer = document.querySelector("#post-container");
 const commentsContainer = document.querySelector("#comments-container");
+
+const commentForm = document.querySelector("#comment-form");
+const emailInput = document.querySelector("email");
+const bodyInput = document.querySelector("#body");
+
 //Get id from URL
 const urlSearchParams = new URLSearchParams(window.location.search);
 const postId = urlSearchParams.get("id");
@@ -67,13 +72,34 @@ async function getPost(Id) {
 
   console.log(dataComments);
 
-  dataComments.map((comment) => {});
+  dataComments.map((comment) => {
+    createComment(comment);
+  });
+}
 
+function createElement(comment) {
+
+  const div = document.createElement("div");
+  const email = document.createElement("h3");
+  const commentBody = document.createElement("p");
+
+  email.innerText = comment.email;
+  commentBody.innerText = comment.body;
+
+  div.appendChild(email);
+  div.appendChild(commentBody);
+
+  commentsContainer.appendChild(div);
 }
 
 if(!postId) {
   getAllPosts();
 } else {
   getPost(postId);
+
+  //Add event to comment form
+  commentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+  });
 }
 
