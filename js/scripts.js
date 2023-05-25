@@ -1,5 +1,6 @@
 const url = "https://jsonplaceholder.typicode.com/posts";
 
+
 const loadingElement = document.querySelector("#loading");
 const postsContainer = document.querySelector("#posts-container");
 
@@ -11,7 +12,7 @@ const commentForm = document.querySelector("#comment-form");
 const emailInput = document.querySelector("email");
 const bodyInput = document.querySelector("#body");
 
-//Get id from URL
+// Load post
 const urlSearchParams = new URLSearchParams(window.location.search);
 const postId = urlSearchParams.get("id");
 
@@ -41,15 +42,14 @@ async function getAllPosts() {
     div.appendChild(title);
     div.appendChild(body);
     div.appendChild(link);
-
     postsContainer.appendChild(div);
   });
 }
 
 //Get individual post
-async function getPost(Id) {
+async function getPost(id) {
 
-  const[responsePost, responseComments] = await Promise.all([
+  const [responsePost, responseComments] = await Promise.all([
     fetch(`${url}/${id}`),
     fetch(`${url}/${id}/comments`),
   ]);
@@ -70,14 +70,12 @@ async function getPost(Id) {
   postsContainer.appendChild(title);
   postContainer.appendChild(body);
 
-  console.log(dataComments);
-
   dataComments.map((comment) => {
     createComment(comment);
   });
 }
 
-function createElement(comment) {
+function createComment(comment) {
 
   const div = document.createElement("div");
   const email = document.createElement("h3");
@@ -92,7 +90,22 @@ function createElement(comment) {
   commentsContainer.appendChild(div);
 }
 
-if(!postId) {
+//Insert a comment
+async function postComment(comment) {
+  const response = await fetch(url, { 
+    method: "POST",
+    body: comment,
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
+
+  const data = await response.json();
+
+  createComment(data);
+}
+
+if (!postId) {
   getAllPosts();
 } else {
   getPost(postId);
@@ -100,6 +113,15 @@ if(!postId) {
   //Add event to comment form
   commentForm.addEventListener("submit", (e) => {
     e.preventDefault();
+
+    let comment = {
+      email: emailInput.value,
+      body: bodyInput.value,
+    };
+
+    comment = JSON.stringify(comment); 
+
+    postComment(comment);
   });
 }
 
